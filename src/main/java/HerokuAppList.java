@@ -2,9 +2,11 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 
 public class HerokuAppList {
@@ -13,28 +15,36 @@ public class HerokuAppList {
         WebDriver driver = null;
         driver = getChromeDriver(os, driver);
         String url = "https://the-internet.herokuapp.com/";
+//        driver.get(url);
+//        checkAndUncheckBoxes(driver);
+//        driver.get(url);
+//        contextMenu(driver);
+//        driver.get(url);
+//        dragAndDrop(driver);
+//        driver.get(url);
+//        dropDown(driver);
+//        driver.get(url);
+//        downloadFile(driver);
+//        driver.get(url);
+//        uploadFile(driver);
+//        driver.get(url);
+//        forgotPassword(driver);
+//        driver.get(url);
+//        frames(driver);
+//        driver.get(url);
+//        iFrames(driver);
+//        driver.get(url);
+//        slideHorizontally(driver);
+//        driver.get(url);
+//        scrollToInfinity(driver);
+//        driver.get(url);
+//        hoverOverImage(driver);
+//        driver.get(url);
+//        inputIncrDecr(driver);
+//        driver.get(url);
+//        keyPressing(driver);
         driver.get(url);
-        checkAndUncheckBoxes(driver);
-        driver.get(url);
-        contextMenu(driver);
-        driver.get(url);
-        dragAndDrop(driver);
-        driver.get(url);
-        dropDown(driver);
-        driver.get(url);
-        downloadFile(driver);
-        driver.get(url);
-        uploadFile(driver);
-        driver.get(url);
-        forgotPassword(driver);
-        driver.get(url);
-        frames(driver);
-        driver.get(url);
-        iFrames(driver);
-        driver.get(url);
-        slideHorizontally(driver);
-        driver.get(url);
-        scrollToInfinity(driver);
+        handlingNewWindow(driver);
         cleanup(driver);
     }
     public static WebDriver getChromeDriver(String os, WebDriver driver) {
@@ -136,6 +146,34 @@ public class HerokuAppList {
         WebElement para = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div/div/div/div[2]"));
 
     }
-
-
+    public static void hoverOverImage(WebDriver driver) {
+        driver.manage().window().maximize();
+        driver.findElement(By.linkText("Hovers")).click();
+        WebElement targetElement = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/img"));
+        Actions hoverAction = new Actions(driver);
+        hoverAction.moveToElement(targetElement).build().perform();
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.findElement(By.linkText("View profile")).click();
+    }
+    public static void inputIncrDecr(WebDriver driver) {
+        driver.findElement(By.linkText("Inputs")).click();
+        driver.findElement(By.cssSelector("#content > div > div > div > input[type=number]")).sendKeys(Keys.ARROW_UP);
+    }
+    public static void keyPressing(WebDriver driver) {
+        driver.findElement(By.linkText("Key Presses")).click();
+        driver.findElement(By.id("target")).sendKeys("a","b",Keys.ARROW_UP,Keys.ARROW_DOWN,Keys.BACK_SPACE,Keys.ENTER);
+    }
+    public static void handlingNewWindow(WebDriver driver) {
+        driver.findElement(By.linkText("Multiple Windows")).click();
+        String originalWindow = driver.getWindowHandle();
+        driver.findElement(By.linkText("Click Here")).click();
+        int handles = driver.getWindowHandles().size();
+        for(String windowHandle : driver.getWindowHandles()) {
+            if (!originalWindow.contentEquals(windowHandle)) {
+                driver.switchTo().window(originalWindow);
+                break;
+            }
+        }
+        System.out.println(handles);
+    }
 }
